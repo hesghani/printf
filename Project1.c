@@ -3,59 +3,52 @@
 #include <unistd.h>
 #include "main.h"
 
-int _printf(const char *format, ...)
-{
+static void print_char(int c, int *count) {
+write(1, &c, 1);
+(*count)++;
+}
+
+static void print_str(const char *str, int *count) {
+if (str == NULL)
+str = "(null)";
+while (*str) {
+write(1, str, 1);
+str++;
+(*count)++;
+}
+}
+
+int _printf(const char *format, ...) {
 int count = 0;
 va_list args;
 
 va_start(args, format);
 
-while (*format)
-{
-if (*format != '%')
-{
+while (*format) {
+if (*format != '%') {
 /* If not a format specifier, print the character */
-write(1, format, 1);
-count++;
-}
-else
-{
+print_char(*format, &count);
+} else {
 format++; /* Move past '%' */
 
 if (*format == '\0')
 break; /* Format string ends with '%', stop processing */
 
-if (*format == 'c')
-{
+if (*format == 'c') {
 /* Handle character specifier */
 int c = va_arg(args, int);
-write(1, &c, 1);
-count++;
-}
-else if (*format == 's')
-{
+print_char(c, &count);
+} else if (*format == 's') {
 /* Handle string specifier */
 char *str = va_arg(args, char *);
-if (str == NULL)
-str = "(null)";
-while (*str)
-{
-write(1, str, 1);
-str++;
-count++;
-}
-}
-else if (*format == '%')
-{
+print_str(str, &count);
+} else if (*format == '%') {
 /* Handle '%' specifier */
-write(1, "%", 1);
-count++;
-}
-else
-{
+print_char('%', &count);
+} else {
 /* Invalid format specifier, ignore it */
-write(1, "%", 1); /* Print the '%' character */
-write(1, format, 1); /* Print the invalid character */
+print_char('%', &count); /* Print the '%' character */
+print_char(*format, &count); /* Print the invalid character */
 count += 2;
 }
 }
@@ -63,5 +56,5 @@ format++;
 }
 
 va_end(args);
-return (count);
+return count;
 }
