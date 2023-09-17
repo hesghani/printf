@@ -2,10 +2,6 @@
 #include <stdarg.h>
 #include <unistd.h>
 
-/* Function prototypes */
-int print_char(int c);
-int print_str(char *str);
-
 /**
  * _printf - Our custom printf function.
  * @format: The format string.
@@ -34,9 +30,23 @@ if (*format == '\0')
 break;
 
 if (*format == 'c')
-count += print_char(va_arg(args, int));
+{
+int c = va_arg(args, int);
+write(1, &c, 1);
+count++;
+}
 else if (*format == 's')
-count += print_str(va_arg(args, char *));
+{
+char *str = va_arg(args, char *);
+if (str == NULL)
+str = "(null)";
+while (*str)
+{
+write(1, str, 1);
+str++;
+count++;
+}
+}
 else if (*format == '%')
 {
 write(1, "%", 1);
@@ -56,37 +66,3 @@ va_end(args);
 return (count);
 }
 
-/**
- * print_char - Print a character.
- * @c: The character to print.
- *
- * Return: 1 (the number of characters printed).
- */
-int print_char(int c)
-{
-write(1, &c, 1);
-return (1);
-}
-
-/**
- * print_str - Print a string.
- * @str: The string to print.
- *
- * Return: The number of characters printed.
- */
-int print_str(char *str)
-{
-int count = 0;
-
-if (str == NULL)
-str = "(null)";
-
-while (*str)
-{
-write(1, str, 1);
-str++;
-count++;
-}
-
-return (count);
-}
