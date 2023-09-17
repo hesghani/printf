@@ -2,6 +2,10 @@
 #include <stdarg.h>
 #include <unistd.h>
 
+/* Function prototypes */
+int print_char(int c);
+int print_str(char *str);
+
 /**
  * _printf - Our custom printf function.
  * @format: The format string.
