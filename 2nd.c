@@ -15,48 +15,48 @@ int print_int(va_list args);
  */
 int _printf(const char *format, ...)
 {
-    int count = 0;
-    va_list args;
+	int count = 0;
+	va_list args;
 
-    va_start(args, format);
+	va_start(args, format);
 
-    while (*format)
-    {
-        if (*format != '%')
-        {
-            write(1, format, 1);
-            count++;
-        }
-        else
-        {
-            format++;
+	while (*format)
+	{
+		if (*format != '%')
+		{
+			write(1, format, 1);
+			count++;
+		}
+		else
+		{
+			format++;
 
-            if (*format == '\0')
-                break;
+			if (*format == '\0')
+				break;
 
-            if (*format == 'c')
-                count += print_char(args);
-            else if (*format == 's')
-                count += print_str(args);
-            else if (*format == 'd' || *format == 'i')
-                count += print_int(args);
-            else if (*format == '%')
-            {
-                write(1, "%", 1);
-                count++;
-            }
-            else
-            {
-                write(1, "%", 1);
-                write(1, format, 1);
-                count += 2;
-            }
-        }
-        format++;
-    }
+			if (*format == 'c')
+				count += print_char(args);
+			else if (*format == 's')
+				count += print_str(args);
+			else if (*format == 'd' || *format == 'i')
+				count += print_int(args);
+			else if (*format == '%')
+			{
+				write(1, "%", 1);
+				count++;
+			}
+			else
+			{
+				write(1, "%", 1);
+				write(1, format, 1);
+				count += 2;
+			}
+		}
+		format++;
+	}
 
-    va_end(args);
-    return (count);
+	va_end(args);
+	return (count);
 }
 
 /**
@@ -67,9 +67,9 @@ int _printf(const char *format, ...)
  */
 int print_char(va_list args)
 {
-    int c = va_arg(args, int);
-    write(1, &c, 1);
-    return (1);
+	int c = va_arg(args, int);
+	write(1, &c, 1);
+	return (1);
 }
 
 /**
@@ -80,20 +80,20 @@ int print_char(va_list args)
  */
 int print_str(va_list args)
 {
-    char *str = va_arg(args, char *);
-    int count = 0;
+	char *str = va_arg(args, char *);
+	int count = 0;
 
-    if (str == NULL)
-        str = "(null)";
+	if (str == NULL)
+		str = "(null)";
 
-    while (*str)
-    {
-        write(1, str, 1);
-        str++;
-        count++;
-    }
+	while (*str)
+	{
+		write(1, str, 1);
+		str++;
+		count++;
+	}
 
-    return (count);
+	return (count);
 }
 
 /**
@@ -104,30 +104,30 @@ int print_str(va_list args)
  */
 int print_int(va_list args)
 {
-    int n = va_arg(args, int);
-    int count = 0;
-    int divisor = 1;
+	int n = va_arg(args, int);
+	int count = 0;
+	int divisor = 1;
 
-    if (n < 0)
-    {
-        write(1, "-", 1);
-        count++;
-        divisor = -divisor;
-        n = -n;
-    }
+	if (n < 0)
+	{
+		write(1, "-", 1);
+		count++;
+		divisor = -divisor;
+		n = -n;
+	}
 
-    while (n / divisor > 9)
-        divisor *= 10;
+	while (n / divisor > 9)
+		divisor *= 10;
 
-    while (divisor != 0)
-    {
-        char digit = n / divisor + '0';
-        write(1, &digit, 1);
-        count++;
-        n %= divisor;
-        divisor /= 10;
-    }
+	while (divisor != 0)
+	{
+		char digit = n / divisor + '0';
+		write(1, &digit, 1);
+		count++;
+		n %= divisor;
+		divisor /= 10;
+	}
 
-    return (count);
+	return (count);
 }
 
