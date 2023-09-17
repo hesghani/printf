@@ -1,10 +1,12 @@
 #include "main.h"
 #include <stdarg.h>
 #include <unistd.h>
+#include <stdio.h> /* Include the <stdio.h> header */
 
 /* Function prototypes */
 int print_char(int c);
 int print_str(char *str);
+int print_int(int num);
 
 /**
  * _printf - Our custom printf function.
@@ -37,6 +39,8 @@ if (*format == 'c')
 count += print_char(va_arg(args, int));
 else if (*format == 's')
 count += print_str(va_arg(args, char *));
+else if (*format == 'd' || *format == 'i')
+count += print_int(va_arg(args, int));
 else if (*format == '%')
 {
 write(1, "%", 1);
@@ -53,6 +57,24 @@ format++;
 }
 
 va_end(args);
+return (count);
+}
+
+/**
+ * print_int - Print an integer.
+ * @num: The integer to print.
+ *
+ * Return: The number of characters printed.
+ */
+int print_int(int num)
+{
+int count = 0;
+char buffer[12]; /* Assuming 32-bit int */
+int length = snprintf(buffer, sizeof(buffer), "%d", num);
+
+write(1, buffer, length);
+count += length;
+
 return (count);
 }
 
