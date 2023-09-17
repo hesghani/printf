@@ -30,23 +30,9 @@ if (*format == '\0')
 break;
 
 if (*format == 'c')
-{
-int c = va_arg(args, int);
-write(1, &c, 1);
-count++;
-}
+count += print_char(va_arg(args, int));
 else if (*format == 's')
-{
-char *str = va_arg(args, char *);
-if (str == NULL)
-str = "(null)";
-while (*str)
-{
-write(1, str, 1);
-str++;
-count++;
-}
-}
+count += print_str(va_arg(args, char *));
 else if (*format == '%')
 {
 write(1, "%", 1);
@@ -66,3 +52,37 @@ va_end(args);
 return (count);
 }
 
+/**
+ * print_char - Print a character.
+ * @c: The character to print.
+ *
+ * Return: 1 (the number of characters printed).
+ */
+int print_char(int c)
+{
+write(1, &c, 1);
+return (1);
+}
+
+/**
+ * print_str - Print a string.
+ * @str: The string to print.
+ *
+ * Return: The number of characters printed.
+ */
+int print_str(char *str)
+{
+int count = 0;
+
+if (str == NULL)
+str = "(null)";
+
+while (*str)
+{
+write(1, str, 1);
+str++;
+count++;
+}
+
+return (count);
+}
